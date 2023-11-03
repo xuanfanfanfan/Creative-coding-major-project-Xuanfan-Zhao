@@ -1,7 +1,6 @@
 let noiseOffsetX = 0.0;
 let noiseOffsetY = 0.0;
-
-
+let buildingHeights = [];
 function windowResized() {
   //Handle when the browser window size changes
   resizeCanvas(windowWidth, windowHeight);
@@ -26,7 +25,7 @@ function setup() {
   // Create a red square
   createBlock(windowWidth * 0.16, windowHeight * 0.04, windowWidth * 0.04, windowHeight * 0.18, color(255, 70, 70));
   createBlock(windowWidth * 0.26, windowHeight * 0.04, windowWidth * 0.08, windowHeight * 0.12, color(255, 70, 70));
-  createBlock(windowWidth * 0.16, windowHeight * 0.54, windowWidth * 0.12, windowHeight * 0.08, color(2255, 70, 70));
+  createBlock(windowWidth * 0.16, windowHeight * 0.54, windowWidth * 0.12, windowHeight * 0.08, color(255, 70, 70));
   createBlock(windowWidth * 0.58, windowHeight * 0.4, windowWidth * 0.12, windowHeight * 0.1, color(255, 70, 70));
   createBlock(windowWidth * 0.68, windowHeight * 0.6, windowWidth * 0.1, windowHeight * 0.14, color(255, 70, 70));
   // Create a gray box
@@ -35,6 +34,28 @@ function setup() {
   createBlock(windowWidth * 0.46, windowHeight * 0.74, windowWidth * 0.06, windowHeight * 0.1, color(169));
   createBlock(windowWidth * 0.74, windowHeight * 0.62, windowWidth * 0.08, windowHeight * 0.04, color(169));
   createBlock(windowWidth * 0.8, windowHeight * 0.04, windowWidth * 0.1, windowHeight * 0.06, color(169));
+
+  for (let i = 0; i < 10; i++) {
+    buildingHeights.push(random(100, 300));
+  }
+
+}
+
+function draw() {
+  for (let i = 0; i < buildingHeights.length; i++) {
+    buildingHeights[i] += map(noise(i * 0.1, frameCount * 0.01), 0, 1, -1, 1);
+    buildingHeights[i] = constrain(buildingHeights[i], 100, 300);
+  }
+  horizontalStreets(buildingHeights);
+}
+
+function horizontalStreets(heights) {
+  for (let i = 0; i < heights.length; i++) {
+    let yPos = map(i, 0, heights.length, windowHeight * 0.1, windowHeight * 0.9);
+    let buildingHeight = heights[i];
+    createBlock(windowWidth * 0.1, yPos, windowWidth * 0.05, buildingHeight, color(150, 150, 220));
+    // Create other building blocks...
+  }
 }
 
 
@@ -47,6 +68,14 @@ function calculatePositions(positionArray, canvasSize) {
   return adjustedPositions;
 }
 
+function horizontalStreets(heights) {
+  for (let i = 0; i < heights.length; i++) {
+    let yPos = map(i, 0, heights.length, windowHeight * 0.1, windowHeight * 0.9);
+    let buildingHeight = heights[i];
+    createBlock(windowWidth * 0.1, yPos, windowWidth * 0.05, buildingHeight, color(150, 150, 220));
+    // Create other building blocks...
+  }
+}
 
 function createBlock(x, y, w, h, c) {
   fill(c);
