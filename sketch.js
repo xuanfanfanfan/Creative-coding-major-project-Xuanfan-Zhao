@@ -1,6 +1,8 @@
 let noiseOffsetX = 0.0;
 let noiseOffsetY = 0.0;
 let buildingHeights = [];
+
+
 function windowResized() {
   //Handle when the browser window size changes
   resizeCanvas(windowWidth, windowHeight);
@@ -11,9 +13,11 @@ function windowResized() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background(229, 228, 240);
+
   // Recalculate the location based on the browser window size
   let yPosArray = calculatePositions([10, 50, 120, 150, 220, 250, 280, 340, 440], windowHeight);
   let xPosArray = calculatePositions([10, 30, 70, 140, 300, 330, 420, 440, 480, 500], windowWidth);
+  
   horizontalStreets(yPosArray);
   verticalStreets(xPosArray);
   // Create a purple square
@@ -43,10 +47,22 @@ function setup() {
 
 function draw() {
   for (let i = 0; i < buildingHeights.length; i++) {
-    buildingHeights[i] += map(noise(i * 0.1, frameCount * 0.01), 0, 1, -1, 1);
-    buildingHeights[i] = constrain(buildingHeights[i], 100, 300);
+    buildingHeights[i] += map(noise(i * 0.9, frameCount * 0.01), 0, 1, -1, 1);
+    buildingHeights[i] = constrain(buildingHeights[i], 400, 900);
+  }
+ 
+  translate(width / 2, height / 2);
+  rotate(frameCount * 0.01);
+  
+  for (let i = 0; i < buildingHeights.length; i++) {
+    buildingHeights[i] += map(noise(i * 0.09, frameCount * 0.01), 0, 1, -1, 1);
+    buildingHeights[i] = constrain(buildingHeights[i], 400, 900);
   }
   horizontalStreets(buildingHeights);
+}
+
+function toggleColorMode() {
+  useRandomColors = !useRandomColors;
 }
 
 function horizontalStreets(heights) {
