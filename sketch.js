@@ -40,6 +40,31 @@ function setup() {
   createBlock(windowWidth * 0.74, windowHeight * 0.62, windowWidth * 0.08, windowHeight * 0.04, color(169));
   createBlock(windowWidth * 0.8, windowHeight * 0.04, windowWidth * 0.1, windowHeight * 0.06, color(169));
 
+  for (let i = 0; i < 100; i++) {
+    let x = random(width);
+    let y = random(height);
+    snowflakes.push({x: x, y: y, radius: random(2, 8)});
+  }
+}
+
+
+function draw() {
+  for (let flake of snowflakes) {
+    fill(255);
+    noStroke();
+    ellipse(flake.x, flake.y, flake.radius*2, flake.radius*2);
+
+    // Move snowflake down
+    if (flake.y < height * 0.1) { 
+      flake.y += random(1, 3);
+    }
+
+    // Reset snowflake position if it goes off-screen
+    if (flake.y > height) {
+      flake.y = random(-10, -100);
+      flake.x = random(width);
+    }
+  }
 }
 
 function calculatePositions(positionArray, canvasSize) {
