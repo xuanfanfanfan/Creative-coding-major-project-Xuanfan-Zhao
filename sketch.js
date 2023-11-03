@@ -20,6 +20,9 @@ function setup() {
   
   horizontalStreets(yPosArray);
   verticalStreets(xPosArray);
+
+  randomSeed(59); 
+
   // Create a purple square
   createBlock(windowWidth * 0.1, windowHeight * 0.16, windowWidth * 0.06, windowHeight * 0.06, color(150, 150, 220));
   createBlock(windowWidth * 0.1, windowHeight * 0.7, windowWidth * 0.08, windowHeight * 0.08, color(150, 150, 220));
@@ -46,14 +49,19 @@ function setup() {
 }
 
 function draw() {
+  // Traverse the building height array
   for (let i = 0; i < buildingHeights.length; i++) {
+    // Random variation of building height using noise function
     buildingHeights[i] += map(noise(i * 0.9, frameCount * 0.01), 0, 1, -1, 1);
     buildingHeights[i] = constrain(buildingHeights[i], 400, 900);
   }
- 
+
+  // Translate the origin of the coordinates to the center of the canvas
   translate(width / 2, height / 2);
+  // Rotate based on the number of frames
   rotate(frameCount * 0.01);
   
+ // Walk through the building height array again
   for (let i = 0; i < buildingHeights.length; i++) {
     buildingHeights[i] += map(noise(i * 0.09, frameCount * 0.01), 0, 1, -1, 1);
     buildingHeights[i] = constrain(buildingHeights[i], 400, 900);
@@ -62,6 +70,7 @@ function draw() {
 }
 
 function toggleColorMode() {
+  // Switch the color mode of the flag variable to reverse
   useRandomColors = !useRandomColors;
 }
 
@@ -70,11 +79,10 @@ function horizontalStreets(heights) {
     let yPos = map(i, 0, heights.length, windowHeight * 0.1, windowHeight * 0.9);
     let buildingHeight = heights[i];
     createBlock(windowWidth * 0.1, yPos, windowWidth * 0.05, buildingHeight, color(150, 150, 220));
-    // Create other building blocks...
   }
 }
 
-
+//Computer location
 function calculatePositions(positionArray, canvasSize) {
   // Adjust the original position to the new canvas size
   let adjustedPositions = [];
@@ -84,21 +92,13 @@ function calculatePositions(positionArray, canvasSize) {
   return adjustedPositions;
 }
 
-function horizontalStreets(heights) {
-  for (let i = 0; i < heights.length; i++) {
-    let yPos = map(i, 0, heights.length, windowHeight * 0.1, windowHeight * 0.9);
-    let buildingHeight = heights[i];
-    createBlock(windowWidth * 0.1, yPos, windowWidth * 0.05, buildingHeight, color(150, 150, 220));
-    // Create other building blocks...
-  }
-}
-
+// Create a block
 function createBlock(x, y, w, h, c) {
   fill(c);
   rect(x, y, w, h);
 }
 
-
+// Horizontal street
 function horizontalStreets(yPosArray) {
   for (let yPos of yPosArray) {
   for (let i = 0; i < width; i += 20) {
@@ -110,7 +110,7 @@ function horizontalStreets(yPosArray) {
   }
 }
 
-
+// Vertical street
 function verticalStreets(xPosArray) {
   for (let xPos of xPosArray) {
   for (let i = 0; i < height; i += 20) {
@@ -122,7 +122,7 @@ function verticalStreets(xPosArray) {
   }
 }
 
-
+// Color mapping
 function colourMap(num) {
   if (num >= 0 && num <= 65) {
   return color(255, 255, 0); // green
